@@ -1,12 +1,23 @@
 package com.dasunhq.application.model;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.List;
 
+@Getter
+@Setter
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
 public class Product {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String brand;
@@ -14,6 +25,8 @@ public class Product {
     private BigDecimal price;
     private int inventory;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="category_id")
     private Category category;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
