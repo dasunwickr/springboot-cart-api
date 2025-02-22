@@ -28,4 +28,8 @@ public class CartItem {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "cart_id")
     private Cart cart;
+
+    public void setTotalPrice( ) {
+        this.totalPrice = this.unitPrice.multiply(new BigDecimal(quantity));
+    }
 }
