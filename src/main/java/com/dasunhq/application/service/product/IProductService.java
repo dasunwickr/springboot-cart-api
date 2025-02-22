@@ -1,5 +1,6 @@
 package com.dasunhq.application.service.product;
 
+import com.dasunhq.application.model.Category;
 import com.dasunhq.application.model.Product;
 import com.dasunhq.application.request.AddProductRequest;
 import com.dasunhq.application.request.UpdateProductsRequest;
@@ -13,11 +14,10 @@ public interface IProductService {
     Product getProductById(Long id);
     void deleteProductById(Long id);
     Product updateProduct(UpdateProductsRequest product, Long productId );
-
     List<Product> getAllProducts();
     List<Product> getProductsByCategory(String category);
     List<Product> getProductsByBrand(String brand);
-    List<Product> getProductsByCategoryAndBrand(String category, String brand);
+    List<Product> getProductsByCategoryAndBrand(Category category, String brand);
     List<Product> getProductsByName(String name);
     List<Product> getProductsByBrandAndName(String brand, String name);
     Long countProductsByBrandAndName(String brand, String name);

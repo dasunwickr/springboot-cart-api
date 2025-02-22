@@ -91,7 +91,7 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public List<Product> getProductsByCategoryAndBrand(String category, String brand) {
+    public List<Product> getProductsByCategoryAndBrand(Category category, String brand) {
         return productRepository.findByCategoryAndBrand(category, brand);
     }
 

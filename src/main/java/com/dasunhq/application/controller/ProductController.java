@@ -1,6 +1,7 @@
 package com.dasunhq.application.controller;
 
 import com.dasunhq.application.exceptions.ResourceNotFoundException;
+import com.dasunhq.application.model.Category;
 import com.dasunhq.application.model.Product;
 import com.dasunhq.application.request.UpdateProductsRequest;
 import com.dasunhq.application.response.ApiResponse;
@@ -76,7 +77,7 @@ public class ProductController {
     }
 
     @GetMapping("/products/by/category-and-brand")
-    public ResponseEntity<ApiResponse> getProductByCategoryAndBrand(@RequestParam String category, @RequestParam String name) {
+    public ResponseEntity<ApiResponse> getProductByCategoryAndBrand(@RequestParam Category category, @RequestParam String name) {
         try {
             List<Product> products = productService.getProductsByCategoryAndBrand(category, name);
             if(products.isEmpty()) {

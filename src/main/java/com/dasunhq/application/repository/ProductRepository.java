@@ -1,5 +1,6 @@
 package com.dasunhq.application.repository;
 
+import com.dasunhq.application.model.Category;
 import com.dasunhq.application.model.Product;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -11,7 +12,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     List<Product> findByBrand(String brand);
 
-    List<Product> findByCategoryAndBrand(String category, String brand);
+    List<Product> findByCategoryAndBrand(Category category, String brand);
 
     List<Product> findByName(String name);
 
