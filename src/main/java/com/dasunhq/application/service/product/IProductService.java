@@ -22,5 +22,7 @@ public interface IProductService {
     List<Product> getProductsByBrandAndName(String brand, String name);
     Long countProductsByBrandAndName(String brand, String name);
 
+    List<ProductDto> getConvertedProducts(List<Product> products);
+
     ProductDto convertToDto(Product product);
 }

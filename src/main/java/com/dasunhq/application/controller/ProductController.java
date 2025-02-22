@@ -1,5 +1,6 @@
 package com.dasunhq.application.controller;
 
+import com.dasunhq.application.dto.ProductDto;
 import com.dasunhq.application.exceptions.ResourceNotFoundException;
 import com.dasunhq.application.model.Category;
 import com.dasunhq.application.model.Product;
@@ -23,14 +24,16 @@ public class ProductController {
     @GetMapping("/all")
     public ResponseEntity<ApiResponse> getAllProducts() {
         List<Product> products = productService.getAllProducts();
-        return ResponseEntity.ok(new ApiResponse("Success!", products));
+        List<ProductDto> convertedProducts = productService.getConvertedProducts(products);
+        return ResponseEntity.ok(new ApiResponse("Success!", convertedProducts));
     }
 
     @GetMapping("/products/{id}/product")
     public ResponseEntity<ApiResponse> getProductById(@PathVariable Long id) {
         try {
             Product product = productService.getProductById(id);
-            return ResponseEntity.ok(new ApiResponse("Success!",product));
+            ProductDto convertedProducts = productService.convertToDto(product);
+            return ResponseEntity.ok(new ApiResponse("Success!",convertedProducts));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
