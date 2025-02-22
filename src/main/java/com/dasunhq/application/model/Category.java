@@ -1,8 +1,8 @@
 package com.dasunhq.application.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.util.List;
 
 @Getter
@@ -16,7 +16,8 @@ public class Category {
     private Long id;
     private String name;
 
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore // Prevents infinite loop
     private List<Product> products;
 
     public Category(String name) {

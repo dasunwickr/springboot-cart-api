@@ -3,6 +3,7 @@ package com.dasunhq.application.controller;
 import com.dasunhq.application.exceptions.ResourceNotFoundException;
 import com.dasunhq.application.model.Category;
 import com.dasunhq.application.model.Product;
+import com.dasunhq.application.request.AddProductRequest;
 import com.dasunhq.application.request.UpdateProductsRequest;
 import com.dasunhq.application.response.ApiResponse;
 import com.dasunhq.application.service.product.IProductService;
@@ -35,9 +36,10 @@ public class ProductController {
         }
     }
     @PostMapping("/add")
-    public ResponseEntity<ApiResponse> addProduct(@RequestBody Product product) {
+    public ResponseEntity<ApiResponse> addProduct(@RequestBody AddProductRequest product) {
         try {
-            return ResponseEntity.ok(new ApiResponse(("Add product success!"), product));
+            Product addedProduct = productService.addProduct(product);
+            return ResponseEntity.ok(new ApiResponse(("Add product success!"), addedProduct));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
         }
@@ -77,7 +79,7 @@ public class ProductController {
     }
 
     @GetMapping("/products/by/category-and-brand")
-    public ResponseEntity<ApiResponse> getProductByCategoryAndBrand(@RequestParam Category category, @RequestParam String name) {
+    public ResponseEntity<ApiResponse> getProductByCategoryAndBrand(@RequestParam String category, @RequestParam String name) {
         try {
             List<Product> products = productService.getProductsByCategoryAndBrand(category, name);
             if(products.isEmpty()) {
@@ -102,7 +104,7 @@ public class ProductController {
         }
     }
 
-    @GetMapping("/product/by-brand")
+    @GetMapping("products/by-brand")
     public ResponseEntity<ApiResponse> findProductByBrand(@RequestParam String brand){
         try {
             List<Product> products = productService.getProductsByBrand(brand);
@@ -115,7 +117,7 @@ public class ProductController {
         }
     }
 
-    @GetMapping("/product/{category}/all/products")
+    @GetMapping("/products/{category}/all/products")
     public ResponseEntity<ApiResponse> findProductsByCategory(@PathVariable String category){
         try {
             List<Product> products = productService.getProductsByCategory(category);

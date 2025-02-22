@@ -1,24 +1,33 @@
 package com.dasunhq.application.service.product;
 
+import com.dasunhq.application.dto.CategoryDto;
+import com.dasunhq.application.dto.ImageDto;
+import com.dasunhq.application.dto.ProductDto;
 import com.dasunhq.application.exceptions.ProductNotFoundException;
 import com.dasunhq.application.exceptions.ResourceNotFoundException;
 import com.dasunhq.application.model.Category;
+import com.dasunhq.application.model.Image;
 import com.dasunhq.application.model.Product;
 import com.dasunhq.application.repository.CategoryRepository;
+import com.dasunhq.application.repository.ImageRepository;
 import com.dasunhq.application.repository.ProductRepository;
 import com.dasunhq.application.request.AddProductRequest;
 import com.dasunhq.application.request.UpdateProductsRequest;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ProductService implements IProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final ModelMapper modelMapper;
+    private final ImageRepository imageRepository;
 
     @Override
     public Product addProduct(AddProductRequest request) {
@@ -28,6 +37,7 @@ public class ProductService implements IProductService {
                    return categoryRepository.save(newCategory);
                });
        request.setCategory(category);
+       System.out.println(request);
        return productRepository.save(createProduct(request,category));
     }
 
@@ -91,9 +101,14 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public List<Product> getProductsByCategoryAndBrand(Category category, String brand) {
+    public List<Product> getProductsByCategoryAndBrand(String categoryName, String brand) {
+        Category category = categoryRepository.findByName(categoryName);
+        if (category == null) {
+            throw new ResourceNotFoundException("Category not found!");
+        }
         return productRepository.findByCategoryAndBrand(category, brand);
     }
+
 
     @Override
     public List<Product> getProductsByName(String name) {
@@ -108,5 +123,23 @@ public class ProductService implements IProductService {
     @Override
     public Long countProductsByBrandAndName(String brand, String name) {
         return productRepository.countByBrandAndName(brand, name);
+    }
+
+    @Override
+    public ProductDto convertToDto(Product product){
+
+        ProductDto productDto = modelMapper.map(product, ProductDto.class);
+
+        CategoryDto categoryDto = modelMapper.map(product.getCategory(), CategoryDto.class);
+        productDto.setCategory(categoryDto);
+
+        List<Image> images = imageRepository.findByProductId(product.getId());
+        List<ImageDto> imageDtos = images.stream()
+                .map(image -> modelMapper.map(image, ImageDto.class))
+                .collect(Collectors.toList());
+
+        productDto.setImages(imageDtos);
+
+        return productDto;
     }
 }
