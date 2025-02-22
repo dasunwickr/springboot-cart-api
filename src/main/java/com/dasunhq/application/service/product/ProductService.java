@@ -1,6 +1,7 @@
 package com.dasunhq.application.service.product;
 
 import com.dasunhq.application.exceptions.ProductNotFoundException;
+import com.dasunhq.application.exceptions.ResourceNotFoundException;
 import com.dasunhq.application.model.Category;
 import com.dasunhq.application.model.Product;
 import com.dasunhq.application.repository.CategoryRepository;
@@ -50,7 +51,7 @@ public class ProductService implements IProductService {
     public void deleteProductById(Long id) {
         productRepository.findById(id)
                 .ifPresentOrElse(productRepository::delete,
-                        ()-> {throw new ProductNotFoundException("Product not found!");
+                        ()-> {throw new ResourceNotFoundException("Product not found!");
                 });
     }
 
@@ -59,7 +60,7 @@ public class ProductService implements IProductService {
         return productRepository.findById(productId)
                 .map(existingProduct -> updateExistingProduct(existingProduct, request))
                 .map(productRepository::save)
-                .orElseThrow(()-> new ProductNotFoundException("Product not found!"));
+                .orElseThrow(()-> new ResourceNotFoundException("Product not found!"));
     }
 
     private Product updateExistingProduct(Product existingProduct, UpdateProductsRequest request) {
@@ -95,7 +96,7 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public ProductRepository getProductsByName(String name) {
+    public List<Product> getProductsByName(String name) {
         return productRepository.findByName(name);
     }
 

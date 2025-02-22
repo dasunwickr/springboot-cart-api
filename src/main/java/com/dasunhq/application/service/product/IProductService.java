@@ -1,7 +1,6 @@
 package com.dasunhq.application.service.product;
 
 import com.dasunhq.application.model.Product;
-import com.dasunhq.application.repository.ProductRepository;
 import com.dasunhq.application.request.AddProductRequest;
 import com.dasunhq.application.request.UpdateProductsRequest;
 
@@ -19,7 +18,7 @@ public interface IProductService {
     List<Product> getProductsByCategory(String category);
     List<Product> getProductsByBrand(String brand);
     List<Product> getProductsByCategoryAndBrand(String category, String brand);
-    ProductRepository getProductsByName(String name);
+    List<Product> getProductsByName(String name);
     List<Product> getProductsByBrandAndName(String brand, String name);
     Long countProductsByBrandAndName(String brand, String name);
 
